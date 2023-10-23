@@ -26,9 +26,14 @@ def scrape_reviews():
             EC.presence_of_element_located((By.XPATH, '//*[@id="mainContent"]'))
         )
 
-        # 제목 가져오기
-        title_xpath = '//*[@id="mainContent"]/div/div[1]/div[2]/div[1]/h3/span[1]'
-        title = driver.find_element(By.XPATH, title_xpath).text
+        try:
+            # 제목 가져오기
+            title_xpath = '//*[@id="mainContent"]/div/div[1]/div[2]/div[1]/h3/span[1]'
+            title = driver.find_element(By.XPATH, title_xpath).text
+        except Exception as e:
+            with open('errors.txt', 'a') as error_file:
+                error_file.write(f'Error at URL {url.strip()}: Could not find the title.\n')
+            continue  # 제목을 찾을 수 없으면 다음 URL로 넘어감
 
         # 4번째 탭에서 URL을 가져와서 이동
         tab_xpath = '//*[@id="mainContent"]/div/div[2]/div[1]/ul/li[4]/a'
