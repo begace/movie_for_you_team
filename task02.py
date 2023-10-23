@@ -35,11 +35,16 @@ def scrape_reviews():
         tab_url = driver.find_element(By.XPATH, tab_xpath).get_attribute('href')
         driver.get(tab_url)
 
-        # "더 보기" 버튼이 표시될 때까지 대기
-        show_more_xpath = '//*[@id="alex-area"]/div/div/div/div[3]/div[1]/button'
-        WebDriverWait(driver, 10).until(
-            EC.visibility_of_element_located((By.XPATH, show_more_xpath))
-        )
+        try:
+            # "더 보기" 버튼이 표시될 때까지 대기
+            show_more_xpath = '//*[@id="alex-area"]/div/div/div/div[3]/div[1]/button'
+            WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.XPATH, show_more_xpath))
+            )
+        except Exception as e:
+            print(f'Error at URL {url.strip()}: Could not find the "Show more" button.')
+            print(str(e))
+            continue  # 오류가 발생하면 다음 URL로 넘어감
 
         # "더 보기" 버튼을 5번 클릭하여 더 많은 리뷰를 로드
         clicked_times = 0
