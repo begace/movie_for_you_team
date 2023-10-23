@@ -52,7 +52,7 @@ def scrape_reviews():
             elements = driver.find_elements(By.XPATH, review_xpath)
             if elements:  # 요소가 존재하면
                 review_text = elements[0].text.replace('\n', ' ')  # 줄바꿈 제거
-                data.append({'Title': title, 'Review': review_text})
+                data.append({'title': title, 'review': review_text})
 
     # 데이터를 CSV 파일에 저장
     df = pd.DataFrame(data)
