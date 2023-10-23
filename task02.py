@@ -42,9 +42,15 @@ def scrape_reviews():
         )
 
         # "더 보기" 버튼을 5번 클릭하여 더 많은 리뷰를 로드
-        for _ in range(5):
-            driver.find_element(By.XPATH, show_more_xpath).click()
-            time.sleep(2)  # 콘텐츠가 로드되는데 시간을 주기 위해 지연 추가
+        clicked_times = 0
+        try:
+            for _ in range(5):
+                driver.find_element(By.XPATH, show_more_xpath).click()
+                clicked_times += 1
+                time.sleep(2)  # 콘텐츠가 로드되는데 시간을 주기 위해 지연 추가
+        except Exception as e:
+            print(f'Error at URL {url.strip()}: Clicked {clicked_times} times before an error occurred.')
+            print(str(e))
 
         # start_xpath에서 end_xpath까지 리뷰 스크랩
         for i in range(1, 161):  # 160개의 리뷰가 로드되었다고 가정
@@ -52,7 +58,7 @@ def scrape_reviews():
             elements = driver.find_elements(By.XPATH, review_xpath)
             if elements:  # 요소가 존재하면
                 review_text = elements[0].text.replace('\n', ' ')  # 줄바꿈 제거
-                data.append({'title': title, 'review': review_text})
+                data.append({'Title': title, 'Review': review_text})
 
     # 데이터를 CSV 파일에 저장
     df = pd.DataFrame(data)
